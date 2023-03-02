@@ -1,0 +1,131 @@
+{% extends 'reviews/base.html' %}
+{% load static %}
+
+{% block page_title %}Edit Author{% endblock page_title %}
+
+{% block title %}Edit Author{% endblock title %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-6">
+        <form action="" method="post" enctype="multipart/form-data" id="form">
+            <div class="card shadow">
+                <div class="card-header">
+                    <div class="tw-flex tw-flex-wrap tw-justify-between tw-items-center">
+                        <h6 class="m-0 font-weight-bold text-primary">Edit Author</h6>
+                        <div>
+                            <button class="btn btn-primary tw-mt-5 publish-post" type="submit">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% csrf_token %}
+                    <label for="">First Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control mb-3" name="first_name" id="first_name" value="{{author.first_name}}" required>
+                    
+                    <label for="">Last Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control mb-3" name="last_name" id="last_name" value="{{author.last_name}}" required>
+
+                    <label for="">Username <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control mb-3" name="username" id="username"  value="{{author.username}}" required>
+
+                    <label for="">Email <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control mb-3" name="email" id="email" value="{{author.email}}" required>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-6">
+        <form action="" method="post" enctype="multipart/form-data" id="form2">
+            <div class="card shadow">
+                <div class="card-header">
+                    <div class="tw-flex tw-flex-wrap tw-justify-between tw-items-center">
+                        <h6 class="m-0 font-weight-bold text-primary">Change Password</h6>
+                        <div>
+                            <button class="btn btn-primary tw-mt-5 publish-post" type="submit">Change Password</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% csrf_token %}
+                    <label for="">New Password <span class="text-danger">*</span></label>
+                    <input type="password" class="form-control mb-3" name="password" id="password" required>
+                    
+                    <label for="">Confirm Password <span class="text-danger">*</span></label>
+                    <input type="password" class="form-control mb-3" name="password2" id="password2" required>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script>
+
+    $("#form").on("submit", function(e){
+       e.preventDefault();
+
+       let first_name = $("#first_name").val();
+       let last_name = $("#last_name").val();
+       let username = $("#username").val();
+       let email = $("#email").val();
+
+        let formData = new FormData();
+        formData.append("first_name", first_name);
+        formData.append("last_name", last_name);
+        formData.append("username", username);
+        formData.append("email", email);
+        formData.append("action", "author");
+
+        $.ajax({
+            url: "",
+            type: "POST",
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            headers: {'X-CSRFToken': csrftoken},
+            success: function(response) {
+                if(response.success){
+                    window.location.href = "{% url 'reviews:authors' %}"
+                }
+                if(response.error){
+                    alert(response.error)
+                }
+            }
+        });
+    });
+    $("#form2").on("submit", function(e){
+        e.preventDefault();
+ 
+        let password = $("#password").val();
+        let password2 = $("#password2").val();
+ 
+         let formData = new FormData();
+         formData.append("action", "password");
+         formData.append("password", password);
+         formData.append("password2", password2);
+ 
+         $.ajax({
+             url: "",
+             type: "POST",
+             data: formData,
+             cache: false,
+             processData: false,
+             contentType: false,
+             headers: {'X-CSRFToken': csrftoken},
+             success: function(response) {
+                 if(response.success){
+                    alert(response.success)
+                 }
+                 if(response.error){
+                     alert(response.error)
+                 }
+             }
+         });
+     });
+  </script>
+{% endblock js %}

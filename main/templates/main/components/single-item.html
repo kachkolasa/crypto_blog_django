@@ -1,0 +1,18 @@
+{% load static %}
+<a class="hover:!tw-text-white" href="{{post.get_absolute_url}}">
+    <div class="tw-rounded-2xl tw-overflow-hidden tw-relative">
+        <img src="{{post.thumbnail.url}}" class="tw-w-full tw-h-full tw-absolute tw-top-0 tw-left-0 tw-blur-[90px]" alt="">
+        <div class="tw-relative tw-top-0 tw-left-0 tw-w-full">
+            <img src="{{post.thumbnail.url}}" class="tw-w-full tw-h-[230px] tw-object-cover" alt="">
+            <div class="tw-p-5">
+                <p class="tw-font-light tw-text-sm tw-uppercase tw-tracking-wide">{{post.type}}</p>
+                <h4 class="tw-text-lg tw-font-bold tw-my-5">{{post.title}}</h4>
+                <div class="tw-flex tw-flex-wrap tw-gap-3 tw-items-center">
+                    <p class="tw-font-light tw-text-sm tw-tracking-wide">{{post.author.get_full_name}}</p>
+                    <span><i class="bi bi-dot tw-text-2xl"></i></span>
+                    <p class="tw-font-light tw-text-sm tw-tracking-wide">{{post.published_at|date:"dS \o\f F Y"}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>

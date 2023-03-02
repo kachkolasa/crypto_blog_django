@@ -1,0 +1,130 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block page_title %}Home{% endblock page_title %}
+
+{% block content %}
+{% include 'main/components/banner.html' %}
+
+{% comment %} Latest {% endcomment %}
+<section class="tw-py-5 lg:tw-py-16">
+    <div class="container">
+        <div class="tw-flex tw-flex-wrap tw-justify-between tw-items-center tw-mb-16">
+            <h2 class="tw-text-3xl tw-font-bold">What's new?</h2>
+            <div>
+                <a href="{% url 'main:latest' %}" class="tw-font-medium">View All <i class="bi bi-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="owl-carousel" id="latest">
+            {% for post in posts %}
+                {% include 'main/components/single-item.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="tw-py-5 lg:tw-py-16 tw-bg-[#16181D]">
+    <div class="container">
+        <div class="tw-grid lg:tw-grid-cols-2 tw-gap-10">
+            <div>
+                <a href="{% url 'main:reviews' %}">
+                    <div class="tw-rounded-2xl tw-overflow-hidden tw-min-h-[400px] tw-relative category-block tw-flex tw-flex-wrap tw-items-end reviews">
+                        <div class="tw-z-[2] tw-relative tw-p-10">
+                            <h4 class="tw-font-bold tw-text-4xl">Reviews</h4>
+                            <p>View all <i class="bi bi-arrow-right"></i></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a href="{% url 'main:reviews' %}">
+                    <div class="tw-rounded-2xl tw-overflow-hidden tw-min-h-[400px] tw-relative category-block tw-flex tw-flex-wrap tw-items-end news">
+                        <div class="tw-z-[2] tw-relative tw-p-10">
+                            <h4 class="tw-font-bold tw-text-4xl">News</h4>
+                            <p>View all <i class="bi bi-arrow-right"></i></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% comment %} News {% endcomment %}
+<section class="tw-py-5 lg:tw-py-16">
+    <div class="container">
+        <div class="tw-flex tw-flex-wrap tw-justify-between tw-items-center tw-mb-16">
+            <h2 class="tw-text-3xl tw-font-bold">Latest News</h2>
+            <div>
+                <a href="{% url 'main:news' %}" class="tw-font-medium">View All <i class="bi bi-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="owl-carousel" id="news">
+            {% for post in news %}
+                {% include 'main/components/single-item.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% comment %} Reviews {% endcomment %}
+<section class="tw-py-5 lg:tw-py-16">
+    <div class="container">
+        <div class="tw-flex tw-flex-wrap tw-justify-between tw-items-center tw-mb-16">
+            <h2 class="tw-text-3xl tw-font-bold">Reviews</h2>
+            <div>
+                <a href="{% url 'main:reviews' %}" class="tw-font-medium">View All <i class="bi bi-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="owl-carousel" id="reviews">
+            {% for post in reviews %}
+                {% include 'main/components/single-item.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% block page_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $(document).ready(function(){
+        const latestCaoursel = $("#latest").owlCarousel({
+            items: 1.5,
+            loop: true,
+            margin: 20,
+            autoplay: true,
+            autoplayTimeout: 4000,
+            responsive: {
+                768: {
+                    items: 3.2,
+                }
+            }
+        });
+        const newsCaoursel = $("#news").owlCarousel({
+            items: 1.5,
+            loop: true,
+            margin: 20,
+            autoplay: true,
+            autoplayTimeout: 4000,
+            responsive: {
+                768: {
+                    items: 3.2,
+                }
+            }
+        });
+        const reviewsCaoursel = $("#reviews").owlCarousel({
+            items: 1.5,
+            loop: true,
+            margin: 20,
+            autoplay: true,
+            autoplayTimeout: 4000,
+            responsive: {
+                768: {
+                    items: 3.2,
+                }
+            }
+        });
+    });
+</script>
+{% endblock page_js %}

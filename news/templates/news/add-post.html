@@ -1,0 +1,139 @@
+{% extends 'news/base.html' %}
+{% load static %}
+
+{% block page_title %}Add Post{% endblock page_title %}
+
+{% block title %}Add Post{% endblock title %}
+
+{% block head_tags %}
+<script src="https://cdn.tiny.cloud/1/jzzk8giaah12fbe3avm9mxv3evl3nysxtv86e22pp8c28lai/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+{% endblock head_tags %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <form action="" method="post" enctype="multipart/form-data" id="form">
+            <div class="card shadow">
+                <div class="card-header">
+                    <div class="tw-flex tw-flex-wrap tw-justify-between tw-items-center">
+                        <h6 class="m-0 font-weight-bold text-primary">Add New Post</h6>
+                        <div>
+                            <button class="btn btn-primary tw-mt-5 publish-post" type="submit" value="publish">Publish Post</button>
+                            <button class="btn btn-secondary tw-mt-5 draft-post" type="submit" value="draft">Save as Draft</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% csrf_token %}
+                    <label for="">Title <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control mb-3" name="title" id="title" required>
+
+                    <label for="">Slug </label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text py-0 tw-cursor-pointer" id="slug-label"><i class="fas fa-edit tw-text-xs"></i></span>
+                        <input type="text" class="form-control" placeholder="Generated Automatically" aria-label="Slug" aria-describedby="slug-label" id="slug" required disabled>
+                    </div>
+
+                    <label for="">Thumbnail </label>
+                    <input type="file" name="thumbnail" class="form-control mb-3" id="thumbnail" accept="image/*">
+
+                    <textarea name="content" id="post_content" cols="30" rows="20" class="tw-min-h-[700px]"></textarea>
+
+                    <button class="btn btn-secondary tw-mt-5 draft-post" type="submit" value="draft">Save as Draft</button>
+                    <button class="btn btn-primary tw-mt-5 publish-post" type="submit" value="publish">Publish Post</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script>
+    tinymce.init({
+      selector: '#post_content',
+      plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount code',
+      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+    });
+
+    function post(status){
+        let title =  $("#title").val();
+        $("#slug").prop("disabled", false);
+        let slug =  $("#slug").val();
+        $("#slug").prop("disabled", true);
+        let content = tinymce.get("post_content").getContent();
+
+        let formData = new FormData();
+        formData.append("status", status);
+        formData.append("title", title);
+        formData.append("slug", slug);
+        formData.append("content", content);
+        formData.append('thumbnail', document.getElementById("thumbnail").files[0]);
+
+        $.ajax({
+            url: "",
+            type: "POST",
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            headers: {'X-CSRFToken': csrftoken},
+            success: function(response) {
+                if(response.success){
+                    if(confirm(response.success)){
+                        window.location.href = "{% url 'news:posts' %}";
+                    }else{
+                        window.location.href = "{% url 'news:posts' %}";
+                    }
+                }
+
+                if(response.error){
+                    alert(response.error)
+                }
+            }
+        });
+    }
+    function convertToSlug(Text) {
+        return Text.toLowerCase()
+                   .replace(/ /g, '-')
+                   .replace(/[^\w-]+/g, '');
+    }
+    $(document).ready(function(){
+        
+    })
+
+    $("#form").on("submit", function(e){
+       e.preventDefault();
+    });
+    
+    $(".draft-post").on("click", function(e){
+        e.preventDefault();
+        post("draft");
+    })
+
+    $(".publish-post").on("click", function(e){
+        e.preventDefault();
+        post("publish");
+    });
+
+
+    $("#title").on("keyup", function(){
+        if($("#slug").prop("disabled") == true){
+            let slug = convertToSlug($(this).val());
+            $("#slug").val(slug);
+        }
+    });
+
+    $("#slug-label").on("click", function(){
+        $("#slug").removeAttr("disabled");
+        $(this).remove();
+    });
+
+    $("#slug").on("keyup", function(){
+        let slug = convertToSlug($(this).val());
+        $("#slug").val(slug);
+    })
+
+  </script>
+{% endblock js %}

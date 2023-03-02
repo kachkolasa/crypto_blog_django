@@ -1,0 +1,36 @@
+{% load static %}
+<footer class="tw-pt-5">
+    <div class="container">
+        <div class="tw-flex tw-flex-wrap tw-justify-center">
+            <div class="tw-w-full">
+                <img src="{% static 'logo/logo.svg' %}" class="tw-w-[80px] tw-mx-auto" alt="">
+                <h5 class="tw-text-center tw-text-xl tw-my-5 poppins tw-uppercase tw-tracking-wider ">The Crypto Dispatch</h5>
+                <ul class="tw-flex tw-justify-center tw-gap-4 tw-text-xl tw-text-[#838997] tw-mb-5">
+                    <li>
+                        <a href="https://www.facebook.com/crypt0dispatch/" target="_blank"><i class="bi bi-facebook"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://www.instagram.com/crypto_dispatch/" target="_blank"><i class="bi bi-instagram"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/crypt0dispatch" target="_blank"><i class="bi bi-telegram"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://t.me/thecryptodispatchlounge" target="_blank"><i class="bi bi-twitter"></i></a>
+                    </li>
+                    <li>
+                        <a href="mailto:info@thecryptodispatch.com" target="_blank"><i class="bi bi-envelope-fill"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="tw-flex tw-flex-wrap tw-justify-between tw-text-xs tw-text-[#838997] tw-border-t tw-border-zinc-900 tw-py-4 tw-mt-5">
+            <div>
+                <p>&copy; {% now "Y" %} - All rights reserved.</p>
+            </div>
+            <div>
+                <p>Developed by <a href="https://developerwings.com">Developer Wings</a></p>
+            </div>
+        </div>
+    </div>
+</footer>

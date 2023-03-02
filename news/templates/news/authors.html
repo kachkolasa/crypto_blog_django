@@ -1,0 +1,81 @@
+
+{% extends 'news/base.html' %}
+{% load static %}
+
+{% block page_title %}Authors{% endblock page_title %}
+
+{% block title %}Authors{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow">
+            <div class="card-header">
+                <div class="tw-flex tw-flex-wrap tw-justify-between tw-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Authors</h6>
+                    <a href="{% url 'news:add-author' %}" class="btn btn-primary">Add Author</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-stripe table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Date Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for author in authors %}
+                            <tr>
+                                <td>
+                                    {{author.get_full_name}}
+                                </td>
+                                <td>
+                                    {{author.username}}
+                                </td>
+                                <td>
+                                    {{author.date_joined}}
+                                </td>
+                                <td>
+                                    {% if not author.is_superuser and not request.user.username == author.username %}
+                                        <a href="{% url 'news:edit-author' author.username %}" class="btn btn-primary btn-sm">Edit</a>
+                                    {% endif %}
+                                    {% if author.username == request.user.username %}
+                                        <a href="{% url 'news:profile' %}" class="btn btn-primary btn-sm">My profile</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if paginator.num_pages > 1 %}
+                    <nav aria-label="Page navigation">
+                        <ul class="tw-inline-flex tw-gap-1 tw-list-none tw-mt-4 tw-ml-0 tw-pl-0">
+                            {% if authors.has_previous %}
+                                <li>
+                                    <a href="?page={{authors.previous_page_number}}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}" class="btn btn-outline-primary btn-sm">Previous</a>
+                                </li>
+                            {% endif %}
+                            {% for page in paginator.page_range %}
+                                <li>
+                                    <a href="?page={{page}}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}" class="btn btn-sm {% if authors.number == page %}btn-primary {% else %} btn-outline-primary{% endif %}">{{page}}</a>
+                                </li>
+                            {% endfor %}
+                            {% if authors.has_next %}
+                                <li>
+                                    <a href="?page={{authors.next_page_number}}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}" class="btn btn-sm  btn-outline-primary">Next</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

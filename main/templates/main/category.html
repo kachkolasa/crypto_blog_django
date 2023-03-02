@@ -1,0 +1,46 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block page_title %}{{category}}{% endblock page_title %}
+
+{% block content %}
+{% include 'main/components/cat-banner.html' %}
+
+{% comment %} Latest {% endcomment %}
+<section class="tw-py-5 lg:tw-py-16">
+    <div class="container">
+        <div class="tw-grid tw-grid-cols-3 tw-gap-5">
+            {% for post in posts %}
+                {% include 'main/components/single-item.html' %}
+            {% endfor %}
+        </div>
+
+
+        {% if paginator.num_pages > 1 %}
+            <ul class="tw-flex tw-flex-wrap tw-gap-2 tw-mt-10 tw-w-full tw-justify-center">
+                {% if posts.has_previous %}
+                    <li>
+                        <a href="?page={{posts.previous_page_number}}"><button class="tw-bg-primary tw-rounded tw-px-5 tw-py-2 tw-text-secondary hover:!tw-text-secondary tw-duration-200 hover:tw-scale-[1.1]">Previous</button></a>
+                    </li>
+                {% endif %}
+                {% for page in paginator.page_range %}
+                    <li>
+                        <a href="?page={{page}}"><button class="tw-bg-primary tw-rounded tw-px-5 tw-py-2 tw-text-secondary hover:!tw-text-secondary tw-duration-200 hover:tw-scale-[1.1]">{{page}}</button></a>
+                    </li>
+                {% endfor %}
+                {% if posts.has_next %}
+                    <li>
+                        <a href="?page={{posts.next_page_number}}"><button class="tw-bg-primary tw-rounded tw-px-5 tw-py-2 tw-text-secondary hover:!tw-text-secondary tw-duration-200 hover:tw-scale-[1.1]">Next</button></a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock content %}
+
+{% block page_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+{% endblock page_js %}

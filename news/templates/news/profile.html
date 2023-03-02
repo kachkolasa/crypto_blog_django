@@ -1,0 +1,145 @@
+{% extends 'news/base.html' %}
+{% load static %}
+
+{% block page_title %}Profile{% endblock page_title %}
+
+{% block title %}Profile{% endblock title %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-6">
+        <form action="" method="post" enctype="multipart/form-data" id="form">
+            <div class="card shadow">
+                <div class="card-header">
+                    <div class="tw-flex tw-flex-wrap tw-justify-between tw-items-center">
+                        <h6 class="m-0 font-weight-bold text-primary">Profile</h6>
+                        <div>
+                            <button class="btn btn-primary tw-mt-5 publish-post" type="submit">Save Change</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% csrf_token %}
+                    <label for="">First Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control mb-3" name="first_name" id="first_name" value="{{request.user.first_name}}" required>
+                    
+                    <label for="">Last Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control mb-3" name="last_name" id="last_name" value="{{request.user.last_name}}" required>
+
+                    <label for="">Username <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control mb-3" name="username" id="username" value="{{request.user.username}}" required>
+
+                    <label for="">Email <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control mb-3" name="email" id="email" value="{{request.user.email}}" required>
+                    
+                    <label for="">Profile <span class="tw-text-xs text-muted"><a href="{{request.user.info.profile.url}}" target="_blank">{{request.user.info.profile.url}}</a></span> </label>
+                    <input type="file" class="form-control mb-3" name="profile" id="profile">
+                    
+                    <label for="">Bio</label>
+                    <textarea name="bio" id="bio" class="form-control">{{request.user.info.bio}}</textarea>
+
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-6">
+        <form action="" method="post" enctype="multipart/form-data" id="form2">
+            <div class="card shadow">
+                <div class="card-header">
+                    <div class="tw-flex tw-flex-wrap tw-justify-between tw-items-center">
+                        <h6 class="m-0 font-weight-bold text-primary">Password</h6>
+                        <div>
+                            <button class="btn btn-primary tw-mt-5 publish-post" type="submit">Change Password</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% csrf_token %}
+                    <label for="">New Password <span class="text-danger">*</span></label>
+                    <input type="password" class="form-control mb-3" name="password" id="password" required>
+                    
+                    <label for="">Confirm Password <span class="text-danger">*</span></label>
+                    <input type="password" class="form-control mb-3" name="password2" id="password2" required>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script>
+
+    $("#form").on("submit", function(e){
+       e.preventDefault();
+
+       let first_name = $("#first_name").val();
+       let last_name = $("#last_name").val();
+       let username = $("#username").val();
+       let email = $("#email").val();
+       let bio = $("#bio").val();
+
+        let formData = new FormData();
+        formData.append("action", "profile");
+        formData.append("first_name", first_name);
+        formData.append("last_name", last_name);
+        formData.append("username", username);
+        formData.append("email", email);
+        formData.append("bio", bio);
+        formData.append('profile', document.getElementById("profile").files[0]);
+
+        $.ajax({
+            url: "",
+            type: "POST",
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            headers: {'X-CSRFToken': csrftoken},
+            success: function(response) {
+                if(response.success){
+                    alert(response.success)
+                }
+                if(response.error){
+                    alert(response.error)
+                }
+            }
+        });
+    });
+    
+
+    $("#form2").on("submit", function(e){
+        e.preventDefault();
+ 
+        let password = $("#password").val();
+        let password2 = $("#password2").val();
+ 
+         let formData = new FormData();
+         formData.append("action", "password");
+         formData.append("password", password);
+         formData.append("password2", password2);
+ 
+         $.ajax({
+             url: "",
+             type: "POST",
+             data: formData,
+             cache: false,
+             processData: false,
+             contentType: false,
+             headers: {'X-CSRFToken': csrftoken},
+             success: function(response) {
+                 if(response.success){
+                     alert(response.success)
+                 }
+                 if(response.error){
+                     alert(response.error)
+                 }
+             }
+         });
+     });
+     
+  </script>
+{% endblock js %}

@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block page_title %}{{category}}{% endblock page_title %}
+
+{% block content %}
+{% include 'main/components/cat-banner.html' %}
+
+{% comment %} Latest {% endcomment %}
+<section class="tw-py-5 lg:tw-py-16">
+    <div class="container">
+        <h4 class="tw-text-center tw-text-4xl">Hold tight, while we work on this. Coming soon!</h4>
+    </div>
+</section>
+
+{% endblock content %}
+
+{% block page_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+{% endblock page_js %}

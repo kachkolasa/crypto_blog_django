@@ -1,0 +1,139 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block page_title %}{{post.title}}{% endblock page_title %}
+
+{% block content %}
+
+{% include 'main/components/article-banner.html' %}
+
+<section class="tw-py-16">
+    <div class="container">
+        <div class="tw-grid lg:tw-grid-cols-12 tw-gap-20">
+            <div class="tw-col-span-2">
+                <p class="tw-uppercase tw-text-[#838997] tw-text-xs tw-font-semibold tw-tracking-wide">Share & support</p>
+                <ul class="tw-flex tw-flex-wrap tw-mt-2 tw-gap-3 tw-text-2xl tw-text-[#838997] tw-mb-5">
+                    <li>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{request.build_absolute_uri}}" target="_blank"><i class="bi bi-facebook"></i></a>
+                    </li>
+                    <li>
+                        <a href="http://www.linkedin.com/shareArticle?mini=true&url={{request.build_absolute_uri}}&title={{article.title}}" target="_blank"><i class="bi bi-linkedin"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://www.reddit.com/submit?url={{request.build_absolute_uri}}&title={{article.title}}" target="_blank"><i class="bi bi-reddit"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/intent/tweet?url={{request.build_absolute_uri}}&text={{article.title}}" target="_blank"><i class="bi bi-twitter"></i></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tw-col-span-7 tw-z-[2]">
+                <div class="tw-rounded-2xl tw-bg-[#F3F8F9] tw-p-5 tw-py-8 tw-text-[#373b46] article-content lg:tw--mt-[150px]">
+                    {{post.content|safe}}
+                </div>
+
+                <div class="tw-bg-[#16181D] tw-rounded-2xl tw-p-5 tw-mt-5">
+                    <h4 class="tw-text-lg tw-font-semibold tw-mb-5">Comments</h4>
+                    <form action="" method="post" id="commentForm">
+                        {% csrf_token %}
+                        <input type="text" class="tw-w-full focus:tw-outline-0 tw-rounded-lg tw-py-3 tw-px-3 tw-bg-white/[0.1] tw-mb-2 placeholder:tw-text-zinc-400 tw-text-sm" placeholder="Your Name *" name="name" required>
+                        <textarea name="comment" rows="10"  class="tw-w-full focus:tw-outline-0 tw-rounded-lg tw-py-3 tw-px-3 tw-bg-white/[0.1] tw-mb-2 placeholder:tw-text-zinc-400 tw-text-sm" placeholder="Comment *"></textarea>
+                        <button class="tw-bg-primary tw-rounded tw-text-black tw-px-4 tw-py-2 tw-text-sm hover:tw-scale-[1.1] tw-duration-200">Submit</button>
+                    </form>
+                </div>
+
+                <div id="comments">
+                    {% for comment in comments %}
+                    <div class="tw-bg-[#16181D] tw-rounded-2xl tw-p-5 tw-pb-6 tw-mt-5">
+                        <div class="tw-flex tw-gap-3 tw-items-center">
+                            <p class="tw-uppercase tw-font-semibold tw-text-sm">{{comment.name}}</p>
+                            <span><i class="bi bi-dot tw-text-xl"></i></span>
+                            <p class="tw-font-light tw-text-sm">{{comment.created_at|date:"dS \o\f F Y"}}</p>
+                        </div>
+                        <p class="tw-text-sm tw-mt-4">{{comment.text}}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tw-col-span-3">
+                {% if author_posts %}
+                    <div class="tw-bg-[#16181D] tw-rounded-2xl tw-p-10">
+                        <h5 class="tw-text-base tw-mb-4 tw-uppercase">From same author</h5>
+                        <ul>
+                            {% for post in author_posts %}
+                                <li class="tw-mb-4">
+                                    <a href="{{post.get_absolute_url}}">{{post.title}}</a> <br>
+                                    <p class="tw-text-zinc-500 tw-text-xs tw-mt-1"><span><i class="bi bi-calendar"></i> {{post.published_at|date:"dS \o\f F Y"}}</span></p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if similar_posts %}
+            <section class="tw-py-5 lg:tw-py-16">
+                <div class="container">
+                    <div class="tw-flex tw-flex-wrap tw-justify-between tw-items-center tw-mb-10">
+                        <h2 class="tw-text-3xl tw-font-bold">Read More in <span class="tw-text-primary tw-capitalize">{{post.type}}</span></h2>
+                        <div>
+                            <a href="#" class="tw-font-medium">View All <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="owl-carousel" id="latest">
+                        {% for post in similar_posts %}
+                            {% include 'main/components/single-item.html' %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock content %}
+
+{% block page_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $(document).ready(function(){
+        const latestCaoursel = $("#latest").owlCarousel({
+            items: 1.5,
+            loop: true,
+            margin: 20,
+            autoplay: true,
+            autoplayTimeout: 4000,
+            responsive: {
+                768: {
+                    items: 3.2,
+                }
+            }
+        });
+        
+        $("#commentForm").on("submit", function(e){
+            e.preventDefault();
+            let formdata = $(this).serialize();
+            $.ajax({
+                url: "",
+                type: "post",
+                dataType: "json",
+                headers: {'X-CSRFToken': csrftoken},
+                data: formdata,
+                success: function(response){
+                    if(response.success){
+                        if(confirm(response.success)){
+                            window.location.reload(0)
+                        }else{
+                            window.location.reload(0)
+                        }
+                    }
+                    if(response.error){
+                        alerT(response.error)
+                    }
+                }
+            })
+        })
+    });
+</script>
+{% endblock page_js %}

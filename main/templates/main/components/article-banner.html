@@ -1,0 +1,19 @@
+{% load static %}
+<style>
+    .banner::before{
+        background-image: url('{% static 'main/images/news.jpg' %}')
+    }
+</style>
+<section class="tw-min-h-[50vh] lg:tw-min-h-[60vh] tw-py-5 tw-flex tw-flex-wrap tw-items-center tw-w-full tw-relative before:tw-content-[''] before:tw-absolute before:tw-top-0 before:tw-left-0 before:tw-w-full before:tw-h-full before:tw-blur-[90px] tw-overflow-hidden banner">
+    <div class="container tw-z-[1]">
+        <p><a href="#" class="tw-text-primary tw-uppercase tw-text-sm">{{post.type}}</a></p>
+        <h1 class="tw-text-4xl lg:tw-text-5xl tw-font-black tw-my-9 lg:tw-my-16">{{post.title}}</h1>
+        <div class="tw-flex tw-flex-wrap tw-gap-4 tw-items-center">
+            <img src="{{post.author.info.profile.url}}" alt="" class="tw-rounded-full tw-w-[50px] tw-h-[50px] tw-object-cover tw-border tw-border-2 tw-border-primary tw-bg-white">
+            <div class="tw-text-white/[0.6]">
+                <h5>By <a href="#" class="tw-text-primary tw-font-semibold">{{post.author.get_full_name}}</a></h5>
+                <p class="tw-text-sm tw-mt-1">{{post.published_at|date:"dS \o\f F Y"}}</p>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,138 @@
+<section class="crypto-banner tw-py-2 tw-border-b tw-border-zinc-900 tw-sticky tw-top-0 tw-z-[9] tw-bg-[#0F1014] tw-hidden lg:tw-block">
+    <div class="container">
+        <div class="tw-flex tw-flex-wrap tw-justify-between tw-items-center tw-text-sm">
+            <div class="tw-flex tw-gap-2 bitcoin">
+                <span>Bitcoin</span>
+                <span><i class="bi tw-text-[8px]"></i></span>
+                <span class="tw-px-2 tw-rounded-sm tw-text-black tw-text-xs tw-flex tw-items-center" id="btc-price"></span>
+            </div>
+            <div class="tw-flex tw-gap-2 ethereum">
+                <span>Ethereum</span>
+                <span><i class="bi tw-text-[8px]"></i></span>
+                <span class="tw-px-2 tw-rounded-sm tw-text-black tw-text-xs tw-flex tw-items-center" id="eth-price"></span>
+            </div>
+            <div class="tw-flex tw-gap-2 binance-coin">
+                <span>Binance Coin</span>
+                <span><i class="bi tw-text-[8px]"></i></span>
+                <span class="tw-px-2 tw-rounded-sm tw-text-black tw-text-xs tw-flex tw-items-center" id="bnb-price"></span>
+            </div>
+            <div class="tw-flex tw-gap-2 solana">
+                <span>Solana</span>
+                <span><i class="bi tw-text-[8px]"></i></span>
+                <span class="tw-px-2 tw-rounded-sm tw-text-black tw-text-xs tw-flex tw-items-center" id="sol-price"></span>
+            </div>
+            <div class="tw-flex tw-gap-2 xrp">
+                <span>XRP</span>
+                <span><i class="bi tw-text-[8px]"></i></span>
+                <span class="tw-px-2 tw-rounded-sm tw-text-black tw-text-xs tw-flex tw-items-center" id="xrp-price"></span>
+            </div>
+            <div class="tw-flex tw-gap-2 doge">
+                <span>Doge</span>
+                <span><i class="bi tw-text-[8px]"></i></span>
+                <span class="tw-px-2 tw-rounded-sm tw-text-black tw-text-xs tw-flex tw-items-center" id="doge-price"></span>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    var liveprice = {
+      "async": true,
+      "scroosDomain": true,
+      "url": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cbinancecoin%2Csolana%2Cripple%2Cdogecoin&vs_currencies=usd&include_24hr_change=true&precision=2",
+      "method": "GET",
+      "headers": {}
+    }
+  
+    $.ajax(liveprice).done(function(response) {
+        // Bitcoin 
+        let bitcoin_price = new Intl.NumberFormat('us-EN').format(response.bitcoin.usd);
+        let bitcoin_change = 0;
+        if(response.bitcoin.usd_24h_change > 0){
+            bitcoin_change = '+' + response.bitcoin.usd_24h_change.toString().substring(0, 4);
+            $(".crypto-banner").find(".bitcoin .bi").addClass("tw-text-green-600 bi-caret-up-fill");
+            $("#btc-price").addClass("tw-bg-[#DDEDDC]");
+        }
+        if(response.bitcoin.usd_24h_change < 0){
+            $(".crypto-banner").find(".bitcoin .bi").addClass("tw-text-red-600 bi-caret-down-fill");
+            $("#btc-price").addClass("tw-bg-[#EBD9D9]");
+            bitcoin_change = '-' + response.bitcoin.usd_24h_change.toString().substring(0, 5);
+        }
+        $("#btc-price").text(`$${bitcoin_price} ${bitcoin_change}%`);
+        
+        // Ethereum 
+        let eth_price = new Intl.NumberFormat('us-EN').format(response.ethereum.usd);
+        let eth_change = 0;
+        if(response.ethereum.usd_24h_change > 0){
+            eth_change = '+' + response.ethereum.usd_24h_change.toString().substring(0, 4);
+            $(".crypto-banner").find(".ethereum .bi").addClass("tw-text-green-600 bi-caret-up-fill");
+            $("#eth-price").addClass("tw-bg-[#DDEDDC]");
+        }
+        if(response.ethereum.usd_24h_change < 0){
+            $(".crypto-banner").find(".ethereum .bi").addClass("tw-text-red-600 bi-caret-down-fill");
+            $("#eth-price").addClass("tw-bg-[#EBD9D9]");
+            eth_change = '-' + response.ethereum.usd_24h_change.toString().substring(0, 5);
+        }
+        $("#eth-price").text(`$${eth_price} ${eth_change}%`);
+        
+        // Binance Coin 
+        let bnb_price = new Intl.NumberFormat('us-EN').format(response.binancecoin.usd);
+        let bnb_change = 0;
+        if(response.binancecoin.usd_24h_change > 0){
+            bnb_change = '+' + response.binancecoin.usd_24h_change.toString().substring(0, 4);
+            $(".crypto-banner").find(".binance-coin .bi").addClass("tw-text-green-600 bi-caret-up-fill");
+            $("#bnb-price").addClass("tw-bg-[#DDEDDC]");
+        }
+        if(response.binancecoin.usd_24h_change < 0){
+            $(".crypto-banner").find(".binance-coin .bi").addClass("tw-text-red-600 bi-caret-down-fill");
+            $("#bnb-price").addClass("tw-bg-[#EBD9D9]");
+            bnb_change = '-' + response.binancecoin.usd_24h_change.toString().substring(0, 5);
+        }
+        $("#bnb-price").text(`$${bnb_price} ${bnb_change}%`);
+        
+        // Solana 
+        let sol_price = new Intl.NumberFormat('us-EN').format(response.solana.usd);
+        let sol_change = 0;
+        if(response.solana.usd_24h_change > 0){
+            sol_change = '+' + response.solana.usd_24h_change.toString().substring(0, 4);
+            $(".crypto-banner").find(".solana .bi").addClass("tw-text-green-600 bi-caret-up-fill");
+            $("#sol-price").addClass("tw-bg-[#DDEDDC]");
+        }
+        if(response.solana.usd_24h_change < 0){
+            $(".crypto-banner").find(".solana .bi").addClass("tw-text-red-600 bi-caret-down-fill");
+            $("#sol-price").addClass("tw-bg-[#EBD9D9]");
+            sol_change = '-' + response.solana.usd_24h_change.toString().substring(0, 5);
+        }
+        $("#sol-price").text(`$${sol_price} ${sol_change}%`);
+        
+        // XRP 
+        let xrp_price = new Intl.NumberFormat('us-EN').format(response.solana.usd);
+        let xrp_change = 0;
+        if(response.ripple.usd_24h_change > 0){
+            xrp_change = '+' + response.ripple.usd_24h_change.toString().substring(0, 4);
+            $(".crypto-banner").find(".xrp .bi").addClass("tw-text-green-600 bi-caret-up-fill");
+            $("#xrp-price").addClass("tw-bg-[#DDEDDC]");
+        }
+        if(response.ripple.usd_24h_change < 0){
+            $(".crypto-banner").find(".xrp .bi").addClass("tw-text-red-600 bi-caret-down-fill");
+            $("#xrp-price").addClass("tw-bg-[#EBD9D9]");
+            xrp_change = response.ripple.usd_24h_change.toString().substring(0, 5);
+        }
+        $("#xrp-price").text(`$${xrp_price} ${xrp_change}%`);
+        
+        // Doge 
+        let doge_price = new Intl.NumberFormat('us-EN').format(response.dogecoin.usd);
+        let doge_change = 0;
+        if(response.dogecoin.usd_24h_change > 0){
+            doge_change = '+' + response.dogecoin.usd_24h_change.toString().substring(0, 4);
+            $(".crypto-banner").find(".doge .bi").addClass("tw-text-green-600 bi-caret-up-fill");
+            $("#doge-price").addClass("tw-bg-[#DDEDDC]");
+        }
+        if(response.dogecoin.usd_24h_change < 0){
+            $(".crypto-banner").find(".doge .bi").addClass("tw-text-red-600 bi-caret-down-fill");
+            $("#doge-price").addClass("tw-bg-[#EBD9D9]");
+            doge_change = response.dogecoin.usd_24h_change.toString().substring(0, 5);
+        }
+        $("#doge-price").text(`$${doge_price} ${doge_change}%`);
+
+    });
+</script>

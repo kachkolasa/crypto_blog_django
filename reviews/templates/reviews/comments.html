@@ -1,0 +1,83 @@
+
+{% extends 'reviews/base.html' %}
+{% load static %}
+
+{% block page_title %}Comments{% endblock page_title %}
+
+{% block title %}Comments{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow">
+            <div class="card-header">
+                <div class="tw-flex tw-flex-wrap tw-justify-between tw-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Comments</h6>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-stripe table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Text</th>
+                                <th>Post</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for comment in comments %}
+                            <tr>
+                                <td>
+                                    {{comment.name}}
+                                </td>
+                                <td>
+                                    {{comment.text}}
+                                </td>
+                                <td>
+                                    <a href="{{comment.post.get_absolute_url}}" target="_blank">{{comment.post.title}}</a>
+                                </td>
+                                <td>
+                                    {{comment.created_at}}
+                                </td>
+                                <td>
+                                    {% if comment.is_active %}
+                                        <a href="?disable={{comment.id}}" class="btn btn-danger btn-sm">Move to Trash</a>
+                                    {% else %}
+                                        <a href="?active={{comment.id}}" class="btn btn-success btn-sm">Make Active</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if paginator.num_pages > 1 %}
+                    <nav aria-label="Page navigation">
+                        <ul class="tw-inline-flex tw-gap-1 tw-list-none tw-mt-4 tw-ml-0 tw-pl-0">
+                            {% if comments.has_previous %}
+                                <li>
+                                    <a href="?page={{comments.previous_page_number}}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}" class="btn btn-outline-primary btn-sm">Previous</a>
+                                </li>
+                            {% endif %}
+                            {% for page in paginator.page_range %}
+                                <li>
+                                    <a href="?page={{page}}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}" class="btn btn-sm {% if comments.number == page %}btn-primary {% else %} btn-outline-primary{% endif %}">{{page}}</a>
+                                </li>
+                            {% endfor %}
+                            {% if comments.has_next %}
+                                <li>
+                                    <a href="?page={{comments.next_page_number}}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}" class="btn btn-sm  btn-outline-primary">Next</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
